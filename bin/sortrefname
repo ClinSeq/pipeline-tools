@@ -1,0 +1,7 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+JARS="${DIR}/../shared/commons-jexl-2.1.1.jar:${DIR}/../shared/commons-logging-1.1.1.jar:${DIR}/../shared/htsjdk-1.133.jar:${DIR}/../shared/snappy-java-1.0.3-rc3.jar:${DIR}/../shared/biostar154220.jar:${DIR}/../shared/sortsamrefname.jar"
+CLASS="com.github.lindenb.jvarkit.tools.misc.SortSamRefName"
+
+exec java -Dfile.encoding=UTF8 -Xmx8g -cp $JARS $CLASS "$@"
