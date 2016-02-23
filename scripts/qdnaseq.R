@@ -1,19 +1,17 @@
 #!/usr/bin/env Rscript
 
+###########################################
+# check command line
 library(getopt)
-library(data.table)
-library(QDNAseq)
-library(CGHcall)
-library(Biobase)
 
 #long, short, argmask, datatype, desk
 #argmask 0=no arg, 1=req, 2=optional
 args <- rbind(c("bam", "b", 1, "character", "Tumor low-pass WGS bam file"),
-	      c("output", "o", 1, "character", "Output tsv with bed file with segmented copy numbers"), 
+              c("output", "o", 1, "character", "Output tsv with bed file with segmented copy numbers"),
         c("background", "x", 1, "character", "Background set to use, as a RData file"))
 
 # opts <- getopt(args,opt = c("--bam", "~/L11466T_wgs.bam",
-#                            "--output", "~/tmp/L11466T_wgs.qdnaseq.txt", 
+#                            "--output", "~/tmp/L11466T_wgs.qdnaseq.txt",
 #                            "--background", "~/bin/autoseqer/resources/qdnaseq_background.Rdata") )
 
 opts <- getopt(args)
@@ -26,6 +24,16 @@ if(is.null(opts$output)){
 if(is.null(opts$background)){
   stop("Must specify background file --background/-x.")
 }
+
+###########################################
+# load packages
+library(data.table)
+library(QDNAseq)
+library(CGHcall)
+library(Biobase)
+
+###########################################
+# run qdnaseq
 
 bgReadCounts <- readRDS(opts$background)
 
