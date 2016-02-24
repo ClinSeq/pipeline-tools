@@ -11,7 +11,7 @@ USAGE: python qdnaseq2bed.py -i qdnaseq.txt
 """
 ap = argparse.ArgumentParser()
 ap.add_argument('-i', help="fasta file", action="store")
-
+ap.add_argument('-n', help="name of the column to select (default=segmented)", default="segmented")
 opts = ap.parse_args()
 
 if opts.i is None:
@@ -29,7 +29,7 @@ for i, line in enumerate(input_file):
     # header line starts with "chromosome", skip it
     if line.startswith("chromosome"):
 	elements = line.split("\t")
-	segmented_index = elements.index("segmented")
+	segmented_index = elements.index(opts.n)
 	continue
 
     # split line
