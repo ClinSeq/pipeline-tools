@@ -8,7 +8,7 @@ library(getopt)
 #argmask 0=no arg, 1=req, 2=optional
 args <- rbind(c("bam", "b", 1, "character", "Tumor low-pass WGS bam file"),
               c("output", "o", 1, "character", "Output tsv with bed file with segmented copy numbers"),
-        c("background", "x", 1, "character", "Background set to use, as a RData file"))
+              c("background", "x", 1, "character", "Background set to use, as a RData file"))
 
 # opts <- getopt(args,opt = c("--bam", "~/L11466T_wgs.bam",
 #                            "--output", "~/tmp/L11466T_wgs.qdnaseq.txt",
