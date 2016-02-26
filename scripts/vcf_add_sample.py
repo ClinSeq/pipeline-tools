@@ -1,6 +1,14 @@
+"""
+vcf_add_sample.py
+
+Add DP, RO and AO for a new sample from a BAM file. Filters variants that are not simple substitutions.
+Optionally filter homozygous variants from the output file (--filter_hom)
+
+usage: vcf_add_sample.py --samplename variants.vcf(.gz) aligned.bam > new.vcf
+
+"""
 import logging
 from collections import namedtuple
-
 import click
 import pysam
 import sys
@@ -10,16 +18,22 @@ from vcf.model import _Call as Call
 
 @click.command()
 @click.option('--loglevel', default='INFO', help='level of logging')
-@click.option('--samplename', default=None, help="namf of the sample to add")
+@click.option('--samplename', default=None, help="name of the sample to add")
+@click.option('--filter_hom', default=False,
+              help="filter variants that are homozygous (0/0 and 1/1) in any sample in the given vcf", is_flag=True)
 @click.argument('variant_file')
 @click.argument('bam_file')
-def main(variant_file, bam_file, samplename, loglevel):
+def main(variant_file, bam_file, samplename, loglevel, filter_hom):
     setup_logging(loglevel)
     vcf_reader = vcf.Reader(open(variant_file, 'r'))
     bamfile = pysam.AlignmentFile(bam_file, "rb")
     vcf_reader.samples.append(samplename)
     vcf_writer = vcf.Writer(open('/dev/stdout', 'w'), vcf_reader)
     for variant in vcf_reader:
+        calls = [call.data.GT for call in variant.samples]
+        if filter_hom and ('0/0' in calls or '1/1' in calls):
+            continue
+
         # only work on simple substitutions
         if len(variant.REF) == 1 and len(variant.ALT) == 1 and len(variant.ALT[0]) == 1:
 
