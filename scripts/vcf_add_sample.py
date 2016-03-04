@@ -1,12 +1,12 @@
-"""
-vcf_add_sample.py
+#!/usr/bin/env python
+"""vcf_add_sample.py
 
 Add DP, RO and AO for a new sample from a BAM file. Filters variants that are not simple substitutions.
 Optionally filter homozygous variants from the output file (--filter_hom)
 
 usage: vcf_add_sample.py --samplename variants.vcf(.gz) aligned.bam > new.vcf
-
 """
+
 import logging
 from collections import namedtuple
 import click
