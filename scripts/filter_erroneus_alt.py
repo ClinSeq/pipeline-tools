@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-
+"""
+removes variants with missing ALT alleles or where REF == ALT
+use `filter_erroneus_alt.py -V /dev/stdin` for streaming with pipes.
+"""
 __author__ = 'dankle'
 
 import argparse
@@ -24,10 +27,12 @@ for i, line in enumerate(fp):
         if len(elements) >= 9:
             REF = elements[3]
             ALT = elements[4]
-            if REF != ALT :
-                sys.stdout.write(line)
-            else:
+            if REF == ALT:
                 sys.stderr.write("Skipped variant with identical REF ant ALT alleles: " + line)
+            elif ALT == ".":
+                sys.stderr.write("Skipped variant with missing ALT: " + line)
+            else:
+                sys.stdout.write(line)
 
 fp.close()
 
